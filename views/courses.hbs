@@ -1,12 +1,9 @@
-<h1>Курсы</h1>
-<pre>
-<!--    {{courses}}-->
-</pre>
+<h1 class="center-align">Курсы</h1>
 
 {{#if courses.length}}
     <div class="row">
     {{#each courses}}
-        <div class="col s12 m7">
+        <div class="col s12 m7 offset-m3">
             <div class="card">
                 <div class="card-image">
                     <img src="{{img}}" alt="{{title}}">
@@ -21,13 +18,15 @@
                 </div>
                 <div class="card-action actions">
                     <a href="/courses/{{_id}}" target="_blank">Открыть курс</a>
-                    <a href="/courses/{{_id}}/edit?allow=true" target="_blank">Редактировать курс</a>
-                    <form action="/card/add" method="POST">
-                        <input type="hidden" name="id" value="{{_id}}">
-                        <button type="submit" class="btn btn-primary">
-                            Купить
-                        </button>
-                    </form>
+                    {{#if @root.isAuth}}
+                        <a href="/courses/{{_id}}/edit?allow=true" target="_blank">Редактировать курс</a>
+                        <form action="/card/add" method="POST">
+                            <input type="hidden" name="id" value="{{_id}}">
+                            <button type="submit" class="btn btn-primary">
+                                Купить
+                            </button>
+                        </form>
+                    {{/if}}
                 </div>
             </div>
         </div>

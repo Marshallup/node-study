@@ -2,6 +2,7 @@ const {Router} = require('express');
 // const Card = require('../models/card');
 const Course = require('../models/course');
 const router = Router();
+const auth = require('../middleware/auth');
 
 function mapCartItems(cart) {
     return cart.items.map(c => ({
@@ -26,7 +27,7 @@ router.post('/add', async (req, res) => {
     res.redirect('/card');
 });
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     // const card = await Card.fetch();
     // console.log(card, 'www')
     const user = await req.user
@@ -43,7 +44,7 @@ router.get('/', async (req, res) => {
     // res.json({test: true})
 });
 
-router.delete('/remove/:id', async (req, res) => {
+router.delete('/remove/:id', auth, async (req, res) => {
     await req.user.removeFromCart(req.params.id);
     const user = await req.user.populate('cart.items.courseId');
     const courses = mapCartItems(user.cart);
