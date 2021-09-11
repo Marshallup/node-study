@@ -1,0 +1,31 @@
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Courses App</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            {{#if isHome}}
+                <li class="active">
+                    <a href="/">Главная</a>
+                </li>
+            {{else}}
+                <li>
+                    <a href="/">Главная</a>
+                </li>
+            {{/if}}
+            <li>
+                <a href="/courses">Курсы</a>
+            </li>
+            <li>
+                <a href="/add">Добавить курс</a>
+            </li>
+            <li>
+                <a href="/card">Корзина</a>
+            </li>
+            <li>
+                <a href="/orders">Заказы</a>
+            </li>
+            <li>
+                <a href="/auth/login#login">Войти</a>
+            </li>
+        </ul>
+    </div>
+</nav>
