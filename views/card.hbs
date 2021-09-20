@@ -1,5 +1,4 @@
 <h1>Корзина</h1>
-<!--{{ card}}-->
 {{#if card.length}}
     <div id="card">
         <table>
@@ -18,7 +17,7 @@
                     <td>{{title}}</td>
                     <td>{{count}}</td>
                     <td>
-                        <button data-id="{{id}}" class="btn btn-small js-remove">
+                        <button data-csrf="{{@root.csrf}}" data-id="{{id}}" class="btn btn-small js-remove">
                             Удалить
                         </button>
                     </td>
@@ -38,10 +37,14 @@
         </p>
 
         <form action="/orders" method="POST">
+            <input type="hidden" name="_csrf" value="{{csrf}}">
+
             <button type="submit" class="btn">
                 Сделать заказ
             </button>
         </form>
     </div>
 
+{{else}}
+    <p>Корзина пуста!</p>
 {{/if}}

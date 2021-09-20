@@ -2,6 +2,8 @@
 
 <form class="course-form" action="/courses/edit" method="POST">
 
+    <input type="hidden" name="_csrf" value="{{csrf}}">
+
     <div class="input-field">
         <input name="title" id="title" value="{{course.title}}" type="text" class="validate" required>
         <label for="title">Название курса</label>
@@ -31,6 +33,7 @@
 
 <form action="/courses/remove" method="POST">
     <input type="hidden" name="id" value="{{course._id}}">
+    <input type="hidden" name="_csrf" value="{{@root.csrf}}">
     <button class="btn red">
         Удалить курс
     </button>

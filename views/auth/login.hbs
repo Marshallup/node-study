@@ -9,8 +9,15 @@
             </ul>
         </div>
         <div id="login" class="col s6 offset-s3">
+            {{#if loginError}}
+                <p class="alert">
+                    {{loginError}}
+                </p>
+            {{/if}}
             <h1 class="text-center">Войти в магазин</h1>
             <form action="/auth/login" method="POST">
+
+                <input type="hidden" name="_csrf" value="{{csrf}}">
 
                 <div class="input-field">
                     <input name="email" id="title" type="email" class="validate" required>
@@ -31,8 +38,15 @@
             </form>
         </div>
         <div id="reg" class="col s6 offset-s3">
+            {{#if registerError}}
+                <p class="alert">
+                    {{registerError}}
+                </p>
+            {{/if}}
             <h1 class="text-center">Создать аккаунт</h1>
             <form action="/auth/register" method="POST">
+
+                <input type="hidden" name="_csrf" value="{{csrf}}">
 
                 <div class="input-field">
                     <input name="remail" id="title" type="email" class="validate" required>
