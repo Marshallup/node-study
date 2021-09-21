@@ -2,6 +2,7 @@ const {Router} = require('express');
 const router = Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const mailer = require('../mail/nodemailer');
 
 router.get('/login', async (req, res) => {
     // req.session.isAuthenticated = true;
@@ -10,7 +11,7 @@ router.get('/login', async (req, res) => {
         isLogin: true,
         loginError: req.flash('loginError'),
         registerError: req.flash('registerError'),
-    })
+    });
 });
 
 router.get('/logout', async (req, res) => {
@@ -35,7 +36,7 @@ router.post('/login', async (req, res) => {
                         throw err;
                     }
                     res.redirect('/');
-                })
+                });
             } else {
                 req.flash('loginError', 'Неверный пароль!');
                 res.redirect('/auth/login#login');
@@ -69,6 +70,15 @@ router.post('/register', async (req, res) => {
            await user.save();
            // console.log(user, 'user');
            res.redirect('/auth/login#login');
+           await mailer({
+               to: remail,
+               subject: 'Тест',
+               html: `
+                Регистрация успешно пройдена!
+                Пользователь - ${name}
+                Почта - ${remail}
+               `,
+           });
        }
 
    } catch (e) {

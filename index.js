@@ -16,8 +16,9 @@ const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 
-const MONGODB_PSWD = 'hbozPfPcDYW8tf8q';
-const MONGODB_URI = `mongodb+srv://admin:${MONGODB_PSWD}@cluster0.8wobw.mongodb.net/shop`;
+require('dotenv').config();
+
+const MONGODB_URI = `mongodb+srv://admin:${process.env.DB_PASS}@cluster0.8wobw.mongodb.net/shop`;
 
 
 const app = express();
@@ -39,7 +40,7 @@ app.set('views', 'views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true}));
 app.use(session({
-    secret: 'some secret value',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store,
