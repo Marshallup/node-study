@@ -3,17 +3,26 @@ const Course = require('../models/course');
 const router = Router();
 const auth = require('../middleware/auth');
 
+function isOwner(course, req) {
+    return course.userId.toString() === req.user._id.toString()
+}
+
 router.get('/', async (req, res) => {
-    let courses = await Course.find()
-        .populate('userId', 'email name')
-        .lean();
-    // courses = JSON.parse(courses);
-    // console.log(courses);
-    res.render('courses', {
-        title: 'Курсы',
-        isCourses: true,
-        courses
-    });
+
+    try {
+        let courses = await Course.find()
+            .populate('userId', 'email name')
+            .lean();
+        res.render('courses', {
+            title: 'Курсы',
+            isCourses: true,
+            userId: req.user ? req.user._id.toString() : null,
+            courses
+        });
+    } catch (e) {
+        console.log(e, 'error courses');
+    }
+
 });
 
 router.get('/:id/edit', auth, async (req, res) => {
@@ -21,21 +30,43 @@ router.get('/:id/edit', auth, async (req, res) => {
        return res.redirect('/courses')
    }
 
-   let course = await Course.findById(req.params.id);
-   course = course.toJSON();
+   try {
 
-   res.render('course-edit', {
-       title: `Редактировать ${course.title}`,
-       course
-   })
+       let course = await Course.findById(req.params.id);
+       // console.log(course.userId.toString(), 'user id');
+
+       if (!isOwner(course, req)) {
+            return res.redirect('/courses');
+       }
+
+       course = course.toJSON();
+
+       res.render('course-edit', {
+           title: `Редактировать ${course.title}`,
+           course
+       });
+   } catch (e) {
+       console.log(e, 'course edit');
+   }
+
 });
 
 router.post('/edit', auth, async (req, res) => {
-    const {id} = req.body;
-    delete req.body.id;
-    // console.log(id, 'wwwww111', req.body)
-    await Course.findByIdAndUpdate(id, req.body);
-    res.redirect('/courses');
+
+    try {
+        const {id} = req.body;
+        delete req.body.id;
+        const course = Course.findById(id);
+        if (!isOwner(course, req)) {
+            return res.redirect('/courses');
+        }
+        Object.assign(course, req.body)
+        await course.save();
+        res.redirect('/courses');
+    } catch (e) {
+        console.log(e, 'error');
+    }
+
 })
 
 router.get('/:id', async (req, res) => {
@@ -51,9 +82,9 @@ router.get('/:id', async (req, res) => {
 
 router.post('/remove', auth, async (req, res) => {
     try {
-        // console.log(req.body)
         await Course.deleteOne({
             _id: req.body.id,
+            userId: req.user._id,
         });
         res.redirect('/courses');
     } catch (e) {

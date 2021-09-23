@@ -18,8 +18,11 @@
                 </div>
                 <div class="card-action actions">
                     <a href="/courses/{{_id}}" target="_blank">Открыть курс</a>
+
                     {{#if @root.isAuth}}
-                        <a href="/courses/{{_id}}/edit?allow=true" target="_blank">Редактировать курс</a>
+                        {{#ifeg userId._id @root.userId }}
+                            <a href="/courses/{{_id}}/edit?allow=true" target="_blank">Редактировать курс</a>
+                        {{/ifeg}}
                         <form action="/card/add" method="POST">
                             <input type="hidden" name="_csrf" value="{{@root.csrf}}">
 

@@ -1,0 +1,27 @@
+<div class="row">
+    <div id="login" class="col s6 offset-s3">
+        {{#if pwdError}}
+            <p class="alert">
+                {{pwdError}}
+            </p>
+        {{/if}}
+        <h1 class="text-center">Задать пароль</h1>
+        <form action="/auth/pwd" method="POST">
+
+            <input type="hidden" name="_csrf" value="{{csrf}}">
+            <input name="userId" value="{{userId}}" type="hidden">
+            <input name="token" value="{{token}}" type="hidden">
+
+            <div class="input-field">
+                <input name="pwd" id="title" type="password" class="validate" required>
+                <label for="email">Новый пароль</label>
+                <span class="helper-text" data-error="Введите пароль"></span>
+            </div>
+
+            <button type="submit" class="btn btn-wrapper">
+                Обновить пароль
+            </button>
+
+        </form>
+    </div>
+</div>
